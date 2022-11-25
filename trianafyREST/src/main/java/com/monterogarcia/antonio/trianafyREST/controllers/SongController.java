@@ -8,8 +8,6 @@ import com.monterogarcia.antonio.trianafyREST.models.Song;
 import com.monterogarcia.antonio.trianafyREST.services.ArtistService;
 import com.monterogarcia.antonio.trianafyREST.services.SongService;
 import lombok.RequiredArgsConstructor;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -92,6 +90,24 @@ public class SongController {
             return ResponseEntity.notFound().build();
         }
 
+        Song oldSong = service.findById(id).get();
+        oldSong.setTitle(s.getTitle());
+        oldSong.setYear(s.getYear());
+        oldSong.setAlbum(s.getAlbum());
+        oldSong.setArtist(s.getArtist());
+
+        service.add(oldSong);
+
+        /*
+        SongResponse songResponse = dtoConverter.songToSongResponse(oldSong);
+         */
+        return ResponseEntity
+                .ok()
+                .body(dtoConverter.songToSongResponse(oldSong));
+
+
+        /*
+
         Song song = service.findById(id).map({
                 song.setTitle(s.getTitle()),
                 song.setAlbum(s.getAlbum()),
@@ -108,5 +124,7 @@ public class SongController {
                     return o;
                 })
         );
+        */
+
     }
 }
