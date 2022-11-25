@@ -37,4 +37,8 @@ public class ArtistService {
     public void delete(Artist a) {
         repository.delete(a);
     }
+
+    public boolean exist(Long id) {
+        return repository.existsById(id);
+    }
 }
