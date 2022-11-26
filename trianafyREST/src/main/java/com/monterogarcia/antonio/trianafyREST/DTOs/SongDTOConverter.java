@@ -21,13 +21,20 @@ public class SongDTOConverter {
 
     public SongResponse songToSongResponse(Song s){
 
+        String name;
+        if (s.getArtist() == null) {
+            name = null;
+        } else {
+            name = s.getArtist().getName();
+        }
+
         return SongResponse
                 .builder()
                 .id(s.getId())
                 .title(s.getTitle())
                 .album(s.getAlbum())
                 .year(s.getYear())
-                .artistName(s.getArtist().getName())
+                .artistName(name)
                 .build();
     }
 }

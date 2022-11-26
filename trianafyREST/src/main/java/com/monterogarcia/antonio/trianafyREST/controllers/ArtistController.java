@@ -1,7 +1,9 @@
 package com.monterogarcia.antonio.trianafyREST.controllers;
 
 import com.monterogarcia.antonio.trianafyREST.models.Artist;
+import com.monterogarcia.antonio.trianafyREST.models.Song;
 import com.monterogarcia.antonio.trianafyREST.services.ArtistService;
+import com.monterogarcia.antonio.trianafyREST.services.SongService;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,9 @@ public class ArtistController {
 
     @Autowired
     private ArtistService service;
+    
+    @Autowired
+    private SongService songService;
 
     @PostMapping("/")
     public ResponseEntity<Artist> add (@RequestBody Artist a) {
@@ -46,10 +51,34 @@ public class ArtistController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Artist> delete (@PathVariable Long id) {
         if (service.exist(id)) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }
+            List<Song> songs = songService.findAll();
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            if (songs.isEmpty()) {
+                service.deletebyId(id);
+                return ResponseEntity
+                        .status(HttpStatus.NO_CONTENT)
+                        .build();
+            }
+
+            for (Song s: songs) {
+                if (s.getArtist() != null) {
+                    if (s.getArtist().getId() == id) {
+                        s.setArtist(null);
+                        songService.add(s);
+                    }
+                }
+
+            }
+            service.deletebyId(id);
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .build();
+        }
+                
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .build();
     }
 
     @PutMapping("/{id}")
@@ -58,7 +87,9 @@ public class ArtistController {
             @RequestBody Artist a) {
 
         if (service.findById(id) == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .build();
         }
         return ResponseEntity.of(
                 service.findById(id).map(o -> {

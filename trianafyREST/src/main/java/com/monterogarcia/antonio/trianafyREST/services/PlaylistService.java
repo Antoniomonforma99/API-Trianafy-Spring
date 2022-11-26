@@ -38,5 +38,6 @@ public class PlaylistService {
         repository.deleteById(id);
     }
 
+    public boolean exist(Long id){ return repository.existsById(id);}
 
 }
