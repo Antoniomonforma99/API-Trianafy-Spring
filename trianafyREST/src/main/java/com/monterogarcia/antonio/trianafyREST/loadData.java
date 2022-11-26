@@ -1,8 +1,10 @@
 package com.monterogarcia.antonio.trianafyREST;
 
 import com.monterogarcia.antonio.trianafyREST.models.Artist;
+import com.monterogarcia.antonio.trianafyREST.models.Playlist;
 import com.monterogarcia.antonio.trianafyREST.models.Song;
 import com.monterogarcia.antonio.trianafyREST.services.ArtistService;
+import com.monterogarcia.antonio.trianafyREST.services.PlaylistService;
 import com.monterogarcia.antonio.trianafyREST.services.SongService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -16,10 +18,10 @@ public class loadData {
     private final ArtistService artistService;
 
     private final SongService songService;
-    /*
+
     private final PlaylistService playlistService;
 
-     */
+
 
     @PostConstruct
     public void run() {
@@ -107,7 +109,7 @@ public class loadData {
 
         songList.forEach(songService::add);
 
-        /*
+
         Playlist p1 = Playlist.builder()
                 .name("Random")
                 .description("Una lista muy loca")
@@ -124,7 +126,7 @@ public class loadData {
 
         System.out.println(p1);
 
-         */
+
 
 
 

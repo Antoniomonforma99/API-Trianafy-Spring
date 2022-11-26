@@ -46,10 +46,10 @@ public class ArtistController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Artist> delete (@PathVariable Long id) {
         if (service.exist(id)) {
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
 
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @PutMapping("/{id}")
@@ -58,7 +58,7 @@ public class ArtistController {
             @RequestBody Artist a) {
 
         if (service.findById(id) == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         return ResponseEntity.of(
                 service.findById(id).map(o -> {

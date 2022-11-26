@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.util.Stack;
 
 @Data
@@ -17,8 +19,9 @@ public class SongResponse {
 
 
     private Long id;
+
     private String title;
-    private String artist;
+    private String artistName;
     private String album;
     private String year;
 
@@ -27,7 +30,7 @@ public class SongResponse {
                 .builder()
                 .id(s.getId())
                 .title(s.getTitle())
-                .artist(s.getArtist().getName())
+                .artistName(s.getArtist().getName())
                 .album(s.getAlbum())
                 .year(s.getYear())
                 .build();

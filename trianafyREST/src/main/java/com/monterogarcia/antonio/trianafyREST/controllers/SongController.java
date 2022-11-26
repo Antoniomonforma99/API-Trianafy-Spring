@@ -49,7 +49,7 @@ public class SongController {
         List<Song> songs = service.findAll();
 
         if (songs.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } else {
             List<SongResponse> allSongs = songs.stream()
                     .map(dtoConverter::songToSongResponse)
@@ -84,17 +84,22 @@ public class SongController {
     @PutMapping("/{id}")
     public ResponseEntity<SongResponse> update (
             @PathVariable Long id,
-            @RequestBody Song s) {
+            @RequestBody CreateSongDTO s) {
 
+        Artist artist = artistService.findById(s.getArtistId()).get();
+
+        if (artist == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
         if (service.findById(id) == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
         Song oldSong = service.findById(id).get();
         oldSong.setTitle(s.getTitle());
         oldSong.setYear(s.getYear());
         oldSong.setAlbum(s.getAlbum());
-        oldSong.setArtist(s.getArtist());
+        oldSong.setArtist(artist);
 
         service.add(oldSong);
 

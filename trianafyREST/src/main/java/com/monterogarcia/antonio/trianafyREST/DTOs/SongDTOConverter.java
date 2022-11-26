@@ -23,10 +23,11 @@ public class SongDTOConverter {
 
         return SongResponse
                 .builder()
+                .id(s.getId())
                 .title(s.getTitle())
                 .album(s.getAlbum())
                 .year(s.getYear())
-                .artist(s.getArtist().getName())
+                .artistName(s.getArtist().getName())
                 .build();
     }
 }
