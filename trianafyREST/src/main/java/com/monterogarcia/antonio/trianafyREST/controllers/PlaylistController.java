@@ -1,10 +1,8 @@
 package com.monterogarcia.antonio.trianafyREST.controllers;
 
-import com.monterogarcia.antonio.trianafyREST.DTOs.CreatePlaylistDTO;
-import com.monterogarcia.antonio.trianafyREST.DTOs.CreatePlaylistResponse;
-import com.monterogarcia.antonio.trianafyREST.DTOs.PlaylistDTOConverter;
-import com.monterogarcia.antonio.trianafyREST.DTOs.PlaylistResponse;
+import com.monterogarcia.antonio.trianafyREST.DTOs.*;
 import com.monterogarcia.antonio.trianafyREST.models.Playlist;
+import com.monterogarcia.antonio.trianafyREST.models.Song;
 import com.monterogarcia.antonio.trianafyREST.services.PlaylistService;
 import com.monterogarcia.antonio.trianafyREST.services.SongService;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +21,7 @@ public class PlaylistController {
     private final PlaylistService service;
     private final PlaylistDTOConverter dtoConverter;
 
+    private final SongDTOConverter songDTOConverter;
     private final SongService songService;
 
     @PostMapping("/")
@@ -111,17 +110,97 @@ public class PlaylistController {
 
     @PostMapping("/{id1}/song/{id2}")
     public ResponseEntity<Playlist> addSongToPlaylist(
-            @PathVariable Long id1, Long id2) {
+            @PathVariable Long id1,
+            @PathVariable Long id2) {
         if(service.findById(id1) == null
-                || songService.findById(id2) == null) {
+        || songService.findById(id2) == null) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .build();
         }
-        service.findById(id1).get().addSong(songService.findById(id2).get());
+
+        Playlist P = service.findById(id1).get();
+        Song s = songService.findById(id2).get();
+
+        P.addSong(s);
+        service.add(P);
+
         return ResponseEntity
                 .ok()
-                .body(service.findById(id1).get());
+                .body(P);
 
     }
+//Preguntar a luismi
+    /*
+    @GetMapping("/{id}/song")
+    public ResponseEntity<SongFromPlaylistResponse> getAllSongsFromPlaylist(@PathVariable Long id) {
+        if(service.findById(id) == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .build();
+        }
+        Playlist p = service.findById(id).get();
+
+        List<SongResponse> songs = p.getSongs().stream()
+                .map(songDTOConverter::songToSongResponse)
+                .collect(Collectors.toList());
+
+        SongFromPlaylistResponse response = dtoConverter.playPlaylistToSomgFromPlaylistRespose(p);
+        return ResponseEntity
+                .ok()
+                .body(response);
+    }
+
+    */
+
+    @GetMapping("/{id}/song")
+    public ResponseEntity<Playlist> getSongsFromPlaylist (@PathVariable Long id) {
+        if (service.findById(id) == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .build();
+        }
+        return ResponseEntity
+                .ok()
+                .body(service.findById(id).get());
+
+    }
+
+
+    @GetMapping("/{id1}/song/{id2}")
+    public ResponseEntity<Song> getSongFromPlaylistById(@PathVariable Long id2) {
+        {
+            if (songService.findById(id2) == null) {
+                return ResponseEntity
+                        .status(HttpStatus.NOT_FOUND)
+                        .build();
+            } else {
+                return ResponseEntity.of(songService.findById(id2));
+            }
+        }
+    }
+
+    @DeleteMapping("/{id1}/song/{id2}")
+    public ResponseEntity<Playlist> deleteSongFromPlaylist(
+            @PathVariable Long id1,
+            @PathVariable Long id2
+    ) {
+        if (service.findById(id1) == null
+        || songService.findById(id2) == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .build();
+        }
+        Playlist p = service.findById(id1).get();
+        Song s = songService.findById(id2).get();
+
+        p.deleteSong(s);
+        service.add(p);
+
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+    }
+
+
 }
