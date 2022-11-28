@@ -5,6 +5,12 @@ import com.monterogarcia.antonio.trianafyREST.models.Playlist;
 import com.monterogarcia.antonio.trianafyREST.models.Song;
 import com.monterogarcia.antonio.trianafyREST.services.PlaylistService;
 import com.monterogarcia.antonio.trianafyREST.services.SongService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +23,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/list")
 @RequiredArgsConstructor
+@Tag(name = "Playlist", description = "Controlador de entidad playlist")
 public class PlaylistController {
 
     private final PlaylistService service;
@@ -166,8 +173,8 @@ public class PlaylistController {
     public ResponseEntity<Playlist> addSongToPlaylist(
             @PathVariable Long id1,
             @PathVariable Long id2) {
-        if(service.findById(id1) == null
-        || songService.findById(id2) == null) {
+        if(service.findById(id1).get() == null
+        || songService.findById(id2).get() == null) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .build();

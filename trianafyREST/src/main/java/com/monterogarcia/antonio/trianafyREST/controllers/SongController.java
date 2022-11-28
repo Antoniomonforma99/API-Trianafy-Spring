@@ -7,6 +7,12 @@ import com.monterogarcia.antonio.trianafyREST.models.Artist;
 import com.monterogarcia.antonio.trianafyREST.models.Song;
 import com.monterogarcia.antonio.trianafyREST.services.ArtistService;
 import com.monterogarcia.antonio.trianafyREST.services.SongService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +25,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/song")
 @RequiredArgsConstructor
-//@Tag(name = "Playlist", description = "Controlador de entidad playlist")
+@Tag(name = "Song", description = "Controlador de entidad song")
 public class SongController {
 
     private final SongService service;
