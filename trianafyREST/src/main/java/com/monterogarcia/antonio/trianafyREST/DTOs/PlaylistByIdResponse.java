@@ -20,6 +20,7 @@ public class PlaylistByIdResponse {
     private String description;
     private List<Song> songs;
 
+    /*
     public static PlaylistByIdResponse of (Playlist p) {
         return PlaylistByIdResponse
                 .builder()
@@ -28,4 +29,6 @@ public class PlaylistByIdResponse {
                 .description(p.getDescription())
                 .songs.
     }
+    */
+
 }
