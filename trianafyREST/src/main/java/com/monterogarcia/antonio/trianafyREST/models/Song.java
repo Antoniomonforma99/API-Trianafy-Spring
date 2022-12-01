@@ -1,5 +1,7 @@
 package com.monterogarcia.antonio.trianafyREST.models;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.monterogarcia.antonio.trianafyREST.jackson.Views;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +17,9 @@ public class Song {
 
     @Id
     @GeneratedValue
+
     private Long id;
+
 
     private String title;
     private String album;

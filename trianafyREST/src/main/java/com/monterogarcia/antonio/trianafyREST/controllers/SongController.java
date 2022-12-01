@@ -1,8 +1,11 @@
 package com.monterogarcia.antonio.trianafyREST.controllers;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.monterogarcia.antonio.trianafyREST.DTOs.CreateSongDTO;
 import com.monterogarcia.antonio.trianafyREST.DTOs.SongDTOConverter;
 import com.monterogarcia.antonio.trianafyREST.DTOs.SongResponse;
+import com.monterogarcia.antonio.trianafyREST.DTOs.song.SongDTO;
+import com.monterogarcia.antonio.trianafyREST.jackson.Views;
 import com.monterogarcia.antonio.trianafyREST.models.Artist;
 import com.monterogarcia.antonio.trianafyREST.models.Song;
 import com.monterogarcia.antonio.trianafyREST.services.ArtistService;
@@ -42,11 +45,12 @@ public class SongController {
                     content = @Content)
     })
     @PostMapping("/")
-    public ResponseEntity<SongResponse> add (@RequestBody CreateSongDTO s) {
+    public ResponseEntity<SongDTO> add (@RequestBody SongDTO s) {
         if (s.getArtistId() == null) {
             return ResponseEntity.badRequest().build();
         }
 
+        /*
         Song newSong = dtoConverter.createSongResponseToSong(s);
         //Mirar el orElse
         Artist artist = artistService.findById(s.getArtistId()).orElse(null);
@@ -55,6 +59,10 @@ public class SongController {
         service.add(newSong);
 
         SongResponse response = dtoConverter.songToSongResponse(newSong);
+
+         */
+
+        Song newSong = SongDTOConverter.
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -68,8 +76,9 @@ public class SongController {
                             schema = @Schema(implementation = Song.class)) }),
             @ApiResponse(responseCode = "404", description = "Canciones no encontradas",
                     content = @Content) })
+    @JsonView(Views.Response.class)
     @GetMapping("/")
-    public ResponseEntity<List<SongResponse>> findAll() {
+    public ResponseEntity<List<SongDTO>> findAll() {
         List<Song> songs = service.findAll();
 
         if (songs.isEmpty()) {
@@ -133,7 +142,7 @@ public class SongController {
                     content = @Content)
     })
     @PutMapping("/{id}")
-    public ResponseEntity<SongResponse> update (
+    public ResponseEntity<SongDTO> update (
             @PathVariable Long id,
             @RequestBody CreateSongDTO s) {
 
